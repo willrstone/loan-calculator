@@ -50,7 +50,7 @@ app.get("/", (req, res)=> {
 });
 
 app.post("/", async(req, res)=> {
-    try{
+    // try{
         let name = req.body.loanName
         let startingBalance = req.body.loanAmount
         let principal = req.body.loanAmount
@@ -117,12 +117,13 @@ app.post("/", async(req, res)=> {
         await loan.save();    
         
         res.redirect("/chart");
-    } catch(err) {
-        console.log(err);
-    }
-    
+    });
+    // // } catch(err) {
+    //     console.log(err);
+    // }
 
-});
+
+// });
 
 
 
@@ -171,7 +172,7 @@ dbLoan().then(results => {
         dateAxis.push(dateLabelString)
     }
 });
-    try{
+    // try{
 
         const loanDocs = await Loan.aggregate([
             {$unwind: "$payments"},
@@ -208,12 +209,12 @@ dbLoan().then(results => {
     let totalCost = amountPaid + interestPaid
         console.log(paymentArray);
     res.render("chart", {dateArray: dateAxis, loanArray: paymentArray, colorArray: colors, interestPaidSum: interestPaid, totalCostSum: totalCost, debtFreeDate: maxDateVar});
-    
-    } catch (err) {
-        console.log(err);
-    }
+});
+//     } catch (err) {
+//         console.log(err);
+//     }
         
-})
+// })
 
 app.post("/chart", (req, res) => {
     res.redirect("/")
