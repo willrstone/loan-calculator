@@ -206,7 +206,7 @@ dbLoan().then(results => {
         }
 
     let totalCost = amountPaid + interestPaid
-        console.log(colors);
+        console.log(paymentArray);
     res.render("chart", {dateArray: dateAxis, loanArray: paymentArray, colorArray: colors, interestPaidSum: interestPaid, totalCostSum: totalCost, debtFreeDate: maxDateVar});
     
     } catch (err) {
