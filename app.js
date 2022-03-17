@@ -39,6 +39,9 @@ app.use(express.static("public"));
 const months = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"];
 
+const colors = ["tomato", "dodgerblue", "green", "purple", "black"]
+
+
 app.get("/", (req, res)=> {
 
     let year = new Date().getFullYear();
@@ -121,6 +124,11 @@ app.post("/", async(req, res)=> {
 
 });
 
+
+
+
+app.get("/chart", async(req, res)=> {
+
 latestDate = [];
 dateFilter = [];
 dateAxis = [];
@@ -163,10 +171,6 @@ dbLoan().then(results => {
         dateAxis.push(dateLabelString)
     }
 });
-
-const colors = ["tomato", "dodgerblue", "green", "purple", "black"]
-
-app.get("/chart", async(req, res)=> {
     try{
 
         const loanDocs = await Loan.aggregate([
