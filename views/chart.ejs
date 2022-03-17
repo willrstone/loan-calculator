@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://kit.fontawesome.com/df5425ecbb.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    
+
+    <title>Chart</title>
+</head>
+<body>
+
+    <section>
+        <div class="container grid">
+            <div id="loanList" class="list-div">
+
+                <!-- <form class="extra-payment">
+                    <h3>Extra Payment</h3>
+                    <div class="dollar">
+                        <span class="prefix">$</span>
+                        <input type="number" class="payment-input">
+                    </div>
+                </form> -->
+
+                <table class="list-group">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Balance</th>
+                            <th>Rate</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let i=0; i<loanArray.length; i++) { %>
+                        <tr>
+                            <td>
+                                <%= loanArray[i]._id.name %>
+                            </td>
+                            <td>
+                                $<%= loanArray[i].payments[0].toFixed(2) %>
+                            </td>
+                            <td>
+                                <%= loanArray[i]._id.rate*100 %>%
+                            </td>
+                            <td>
+                                <a class="delete" href="/delete/<%= loanArray[i]._id._id %>"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
+                            </td>
+                        </tr>
+                            <% } %>
+                    </tbody>
+                </table>
+
+                        <a href="/" class="btn" role="button">New Loan</a>
+                    
+               
+                
+            </div>  
+
+            <div class="container chartBox">
+
+                <div class="boxes">
+                    <div class="item">
+                        <h3>Total Loan Cost:</h3>
+                        <p>$<%- totalCostSum.toFixed(2) %></p>
+                    </div>
+                    <div class="item">
+                        <h3>Total Interest Paid:</h3>
+                        <p>$<%- interestPaidSum.toFixed(2) %></p>
+                    </div>
+                    <div class="item">
+                        <h3>Debt Free Date:</h3>
+                        <p><%- debtFreeDate[0] %></p>
+                    </div>
+                </div>
+
+                <div class="chartDiv">
+                    <canvas id="myChart"></canvas>
+                </div>  
+
+            </div>
+        </div>
+    </section> 
+
+    <script>
+        let myChart = document.getElementById("myChart").getContext("2d");
+
+        let loanChart = new Chart(myChart, {
+            type: 'bar',
+            data: {
+                labels: <%- JSON.stringify(dateArray) %>,
+                datasets: [ <% for (let i=0; i<loanArray.length; i++) { %>
+                            {
+                                label: <%- JSON.stringify(loanArray[i]._id.name) %>, 
+                                data: [<% for (let x=0; x<loanArray[i].payments.length; x++) { %>
+                                    <%- JSON.stringify(loanArray[i].payments[x]) %>,
+                                    <% } %>, ],
+                                backgroundColor: <%- JSON.stringify(colorArray[i]) %>
+                            },
+                            <% } %>
+                        ] 
+                    },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                title: {
+                    display: true,
+                    text: 'Chart.js Bar Chart - Stacked'
+                },
+                },
+                
+                scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true
+                }
+                }
+        }
+        });
+    </script>
+</body>
+</html>

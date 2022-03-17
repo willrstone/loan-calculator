@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="form-container">
+        <div class="loanDiv">
+            <form class="loanForm" method="post" action="/">
+                <label>
+                    Loan Name:
+                    <input type="text" name="loanName" required>
+                </label>
+                <label>
+                    Amount:
+                    <input type="text" name="loanAmount" required>
+                </label>
+                <label>
+                    Rate (%):
+                    <input type="text" name="interestRate" required>
+                </label>
+                <label>
+                    Months:
+                    <input type="text" name="term" required>
+                </label>
+                <div class="select">
+                <select name="month" id="month">
+                    <% for (let i = 0; i < monthArray.length; i++) { %>
+                        <option><%= monthArray[i] %></option>
+                    <% } %>
+                </select>
+                <select name="year" id="year">
+                    <% for (let i = 0; i < 101; i++) { %>
+                        <option><%=yearSelect - i %></option>
+                    <% } %>
+                </select>
+                </div>
+                <div class="btn-container">
+                    <button class="btn btn-primary" type="submit" name="submit">Calculate</button>
+                    <a href="/chart" class="btn btn-primary" role="button">View Chart</a>
+                </div>
+            </form>
+        </div>
+    </div>    
+</body>
+</html>
