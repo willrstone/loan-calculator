@@ -202,7 +202,7 @@ app.get("/chart", async(req, res)=> {
         }
 
     let totalCost = amountPaid + interestPaid
-        console.log(maxDateVar);
+        console.log(colors);
     res.render("chart", {dateArray: dateAxis, loanArray: paymentArray, colorArray: colors, interestPaidSum: interestPaid, totalCostSum: totalCost, debtFreeDate: maxDateVar});
     
     } catch (err) {
