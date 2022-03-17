@@ -167,10 +167,6 @@ dbLoan().then(results => {
 const colors = ["tomato", "dodgerblue", "green", "purple", "black"]
 
 app.get("/chart", async(req, res)=> {
-    let amountPaid = 0
-    let interestPaid = 0
-    let payoffDate = []
-
     try{
 
         const loanDocs = await Loan.aggregate([
@@ -194,6 +190,10 @@ app.get("/chart", async(req, res)=> {
         ])
 
         const paymentArray = loanDocs
+
+        let amountPaid = 0
+        let interestPaid = 0
+        let payoffDate = []
 
         for (let i=0; i<paymentArray.length; i++) {
             amountPaid += paymentArray[i]._id.amount
