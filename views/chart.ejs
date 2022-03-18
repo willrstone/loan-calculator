@@ -45,7 +45,7 @@
                                 $<%= loanArray[i].payments[0].toFixed(2) %>
                             </td>
                             <td>
-                                <%= loanArray[i]._id.rate*100 %>%
+                                <%= (loanArray[i]._id.rate*100).toFixed(2) %>%
                             </td>
                             <td>
                                 <a class="delete" href="/delete/<%= loanArray[i]._id._id %>"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
@@ -110,7 +110,7 @@
                 plugins: {
                 title: {
                     display: true,
-                    text: 'Chart.js Bar Chart - Stacked'
+                    text: 'Remaining Balance by Month'
                 },
                 },
                 
