@@ -131,43 +131,46 @@ app.get("/chart", async(req, res)=> {
 
 try{
 
+dateTest = new Date(2022, 3)
+dateTestString = dateTest.toString()
 latestDate = [];
 dateFilter = [];
 dateAxis = [];
 maxDateVar = [];
+dateFilter.push(dateTestString)
 
-const dbLoan =  await Loan.find({}, { _id: 0, lastPaymentDate: 1})
+// const dbLoan =  await Loan.find({}, { _id: 0, lastPaymentDate: 1})
 
-    for (let i=0; i<dbLoan.length; i++) {
-        let dateFull = new Date(dbLoan[i].lastPaymentDate)
-        latestDate.push(dateFull)
-    }
+//     for (let i=0; i<dbLoan.length; i++) {
+//         let dateFull = new Date(dbLoan[i].lastPaymentDate)
+//         latestDate.push(dateFull)
+//     }
     
-    let maxDate = new Date(Math.max.apply(null,latestDate));
-    let maxDateShort = maxDate.toLocaleString('en-US', {month: 'short', year: 'numeric'})
-    maxDateVar.push(maxDateShort)
-    let today = new Date();
-    let year1 = today.getFullYear();
-    let year2 = maxDate.getFullYear();
-    let month1 = today.getMonth();
-    let month2 = maxDate.getMonth();
-    if(month1===0){
-        month1++
-        month2++
-    }
-    let dateDiff=(year2 - year1) * 12 + (month2 - month1) -1
+//     let maxDate = new Date(Math.max.apply(null,latestDate));
+//     let maxDateShort = maxDate.toLocaleString('en-US', {month: 'short', year: 'numeric'})
+//     maxDateVar.push(maxDateShort)
+//     let today = new Date();
+//     let year1 = today.getFullYear();
+//     let year2 = maxDate.getFullYear();
+//     let month1 = today.getMonth();
+//     let month2 = maxDate.getMonth();
+//     if(month1===0){
+//         month1++
+//         month2++
+//     }
+//     let dateDiff=(year2 - year1) * 12 + (month2 - month1) -1
 
-    let currentMonth = today.getMonth();
-    let currentYear = today.getFullYear();
+//     let currentMonth = today.getMonth();
+//     let currentYear = today.getFullYear();
 
 
-    for (let i=0; i<dateDiff+1; i++) {
-        let rawDate = new Date(currentYear, currentMonth + i)
-        let dateLabel = rawDate.toString()
-        let dateLabelString = rawDate.toLocaleString('en-US', {month: 'short', year: 'numeric'});
-        dateFilter.push(dateLabel)
-        dateAxis.push(dateLabelString)
-    }
+//     for (let i=0; i<dateDiff+1; i++) {
+//         let rawDate = new Date(currentYear, currentMonth + i)
+//         let dateLabel = rawDate.toString()
+//         let dateLabelString = rawDate.toLocaleString('en-US', {month: 'short', year: 'numeric'});
+//         dateFilter.push(dateLabel)
+//         dateAxis.push(dateLabelString)
+//     }
 
         const loanDocs = await Loan.aggregate([
             {$unwind: "$payments"},
