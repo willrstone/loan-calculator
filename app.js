@@ -50,7 +50,7 @@ app.get("/", (req, res)=> {
 });
 
 app.post("/", async(req, res)=> {
-    // try{
+    try{
         let name = req.body.loanName
         let startingBalance = req.body.loanAmount
         let principal = req.body.loanAmount
@@ -117,31 +117,28 @@ app.post("/", async(req, res)=> {
         await loan.save();    
         
         res.redirect("/chart");
-    });
-    // // } catch(err) {
-    //     console.log(err);
-    // }
+    } catch(err) {
+        console.log(err);
+    }
+    
 
-
-// });
+});
 
 
 
 
 app.get("/chart", async(req, res)=> {
 
+try{
+
 latestDate = [];
 dateFilter = [];
 dateAxis = [];
 maxDateVar = [];
 
+const dbLoan =  await Loan.find({}, { _id: 0, lastPaymentDate: 1})
 
-function dbLoan() {
-    return Loan.find({}, { _id: 0, lastPaymentDate: 1})
-}
-
-dbLoan().then(results => {
-    for (let i=0; i<results.length; i++) {
+    for (let i=0; i<dbLoan.length; i++) {
         let dateFull = new Date(results[i].lastPaymentDate)
         latestDate.push(dateFull)
     }
@@ -171,8 +168,6 @@ dbLoan().then(results => {
         dateFilter.push(dateLabel)
         dateAxis.push(dateLabelString)
     }
-});
-    // try{
 
         const loanDocs = await Loan.aggregate([
             {$unwind: "$payments"},
@@ -209,12 +204,12 @@ dbLoan().then(results => {
     let totalCost = amountPaid + interestPaid
         console.log(paymentArray);
     res.render("chart", {dateArray: dateAxis, loanArray: paymentArray, colorArray: colors, interestPaidSum: interestPaid, totalCostSum: totalCost, debtFreeDate: maxDateVar});
-});
-//     } catch (err) {
-//         console.log(err);
-//     }
+    
+    } catch (err) {
+        console.log(err);
+    }
         
-// })
+})
 
 app.post("/chart", (req, res) => {
     res.redirect("/")
