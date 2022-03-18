@@ -133,11 +133,13 @@ try{
 
 dateTest = new Date(2022, 3)
 dateTestString = dateTest.toString()
+dateAxisString = dateTest.toLocaleString('en-US', {month: 'short', year: 'numeric'})
 latestDate = [];
 dateFilter = [];
 dateAxis = [];
 maxDateVar = [];
 dateFilter.push(dateTestString)
+dateAxis.push(dateAxisString)
 
 // const dbLoan =  await Loan.find({}, { _id: 0, lastPaymentDate: 1})
 
