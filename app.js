@@ -139,7 +139,7 @@ maxDateVar = [];
 const dbLoan =  await Loan.find({}, { _id: 0, lastPaymentDate: 1})
 
     for (let i=0; i<dbLoan.length; i++) {
-        let dateFull = new Date(results[i].lastPaymentDate)
+        let dateFull = new Date(dbLoan[i].lastPaymentDate)
         latestDate.push(dateFull)
     }
     
