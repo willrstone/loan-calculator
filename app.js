@@ -3,9 +3,7 @@ const dotenv = require("dotenv")
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose")
 const connectDB = require("./config/db")
-const asyncHandler = require('express-async-handler')
-
-dotenv.config({ path: './config/config.env'})
+dotenv.config({ path: 'config.env'})
 connectDB()
 
 
@@ -39,7 +37,11 @@ app.use(express.static("public"));
 const months = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"];
 
-const colors = ["tomato", "dodgerblue", "green", "purple", "black"]
+const colors = [
+    "#FF5768", "#00A5E3", "#4DD091", "#FFEC59",
+    "#FF60A8", "#1DEEE1", "#8BFF1E", "#534FF2",
+    "#FBFB02", "#FE7303", "#F80300", "#1DEEE1"
+]
 
 
 app.get("/", (req, res)=> {
@@ -59,47 +61,43 @@ app.post("/", async(req, res)=> {
         let monthlyRate = rate/12
         let monthlyPayment = (principal*monthlyRate)*(Math.pow(1+monthlyRate, term))/(Math.pow((1+monthlyRate), term)-1)
         console.log(monthlyPayment);
-        let monthlyInterest = principal * (rate/12)
-        let monthlyPrincipal = monthlyPayment - monthlyInterest
-        let remainingBalance = principal
-        let i = 0
         let monthInput = months.indexOf(req.body.month)
         let yearInput = req.body.year
-        let startDate = new Date(yearInput, monthInput);
-        let startDateString = startDate.toLocaleString('en-US', {month: 'short', year: 'numeric'})
-    
-       
-    
+        let startDate = new Date(yearInput, monthInput)
         
-        let fixedPayment = monthlyPayment
+        let fixedPayment = monthlyPayment.toFixed(2)
         let interestArray = []
         let dbPayments = []
-    
-        while (principal > 0 && i < term) {
-    
-            if (fixedPayment === principal) {
-                principal - fixedPayment;
+        let i = 0
+
+
+        while (principal > 0) {
+            principalPmt = (fixedPayment - ((principal*(rate/12))).toFixed(2)).toFixed(2)
+            interestPmt = fixedPayment - principalPmt
+            principal -= principalPmt
+            monthlyPaymentDate = new Date(yearInput, monthInput + i)
+            monthlyPaymentDateString = monthlyPaymentDate.toLocaleString('en-US', {month: 'short', year: 'numeric'})
+            interestArray.push(interestPmt) 
+            i++
+            if ((principal - fixedPayment) > -1) {
+                let payment = {
+                    paymentNumber: i,
+                    remainingBalance: principal,
+                    paymentDate: monthlyPaymentDate}
+
+                dbPayments.push(payment);
+
             } else {
-                principalPmt = fixedPayment - (principal*(rate/12))
-                interestPmt = fixedPayment - principalPmt
-                principal -= principalPmt
-                monthlyPaymentDate = new Date(yearInput, monthInput + i)
-                monthlyPaymentDateString = monthlyPaymentDate.toLocaleString('en-US', {month: 'short', year: 'numeric'})
-                interestArray.push(interestPmt)
+                let payment = {
+                    paymentNumber: i,
+                    remainingBalance: 0,
+                    paymentDate: monthlyPaymentDate}
+
+                dbPayments.push(payment);
             }
-    
-            i++;
-    
-            let payment = {
-                paymentNumber: i,
-                remainingBalance: principal,
-                paymentDate: monthlyPaymentDate
+                
             };
-    
-            dbPayments.push(payment);
-    
-        }
-    
+                
         let totalInterest = interestArray.reduce((total, current) => (total + current), 0)
     
         const loan = new Loan ({
@@ -130,16 +128,10 @@ app.post("/", async(req, res)=> {
 app.get("/chart", async(req, res)=> {
 
 try{
-
-dateTest = new Date(2022, 3)
-dateTestString = dateTest.toString()
-dateAxisString = dateTest.toLocaleString('en-US', {month: 'short', year: 'numeric'})
 latestDate = [];
 dateFilter = [];
 dateAxis = [];
 maxDateVar = [];
-dateFilter.push(dateTestString)
-dateAxis.push(dateAxisString)
 
 const dbLoan =  await Loan.find({}, { _id: 0, lastPaymentDate: 1})
 
@@ -166,7 +158,7 @@ const dbLoan =  await Loan.find({}, { _id: 0, lastPaymentDate: 1})
     let currentYear = today.getFullYear();
 
 
-    for (let i=0; i<dateDiff+1; i++) {
+    for (let i=0; i<dateDiff+2; i++) {
         let rawDate = new Date(currentYear, currentMonth + i)
         let dateLabel = rawDate.toString()
         let dateLabelString = rawDate.toLocaleString('en-US', {month: 'short', year: 'numeric'});
@@ -207,7 +199,7 @@ const dbLoan =  await Loan.find({}, { _id: 0, lastPaymentDate: 1})
         }
 
     let totalCost = amountPaid + interestPaid
-        console.log(paymentArray);
+        console.log(dateFilter);
     res.render("chart", {dateArray: dateAxis, loanArray: paymentArray, colorArray: colors, interestPaidSum: interestPaid, totalCostSum: totalCost, debtFreeDate: maxDateVar});
     
     } catch (err) {

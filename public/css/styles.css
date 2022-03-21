@@ -64,6 +64,7 @@ form {
 }
 
 .list-div {
+  padding: 5px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -84,7 +85,6 @@ form {
 }
 
 table {
-  padding: 5px;
   background-color: #0070ff;
   border-radius: 10px;
   box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.6);
@@ -130,6 +130,10 @@ td {
   font-size: large;
 } */
 
+.chartBox {
+  display: flex;
+  flex-direction: column;
+}
 .chartDiv {
   height: 600px;
   width: auto;
@@ -141,8 +145,9 @@ td {
   gap: 20px;
 }
 
-.container .boxes {
+.boxes {
   display: flex;
+  flex-direction: row;
 }
 
 .item {
@@ -186,4 +191,49 @@ p {
 a {
   color: white;
   text-decoration: none;
+}
+
+/* Tablets and under */
+@media screen and (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  section {
+    padding: 0;
+    margin: 0;
+  }
+
+  .container {
+    margin: 0;
+  }
+
+  .list-div {
+    padding: 15px 100px 0px;
+  }
+
+  .chartBox {
+    padding: 5px;
+  }
+}
+
+@media (max-width: 500px) {
+  .boxes {
+    flex-direction: column;
+    height: auto;
+    margin: auto;
+  }
+
+  .item {
+    flex-direction: row;
+    flex-basis: 0;
+    padding: 5px;
+    margin: 5px;
+    justify-content: space-between;
+  }
+
+  h3,
+  p {
+    padding: 5px;
+  }
 }
