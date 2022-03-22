@@ -79,7 +79,7 @@ app.post("/", async(req, res)=> {
             monthlyPaymentDateString = monthlyPaymentDate.toLocaleString('en-US', {month: 'short', year: 'numeric'})
             interestArray.push(interestPmt) 
             i++
-            if ((principal - fixedPayment) > -1) {
+            if ((principal - principalPmt) > 0) {
                 let payment = {
                     paymentNumber: i,
                     remainingBalance: principal,
@@ -88,9 +88,10 @@ app.post("/", async(req, res)=> {
                 dbPayments.push(payment);
 
             } else {
+                principal -= principal
                 let payment = {
                     paymentNumber: i,
-                    remainingBalance: 0,
+                    remainingBalance: principal,
                     paymentDate: monthlyPaymentDate}
 
                 dbPayments.push(payment);
